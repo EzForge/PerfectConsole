@@ -2,21 +2,19 @@
 
 class _FFI_Helper
 {
-    static function fix($type)
+    static function fix($string)
     {
-        $arr = array(
-            'boolean ' => 'sint8 ',
-            'bool ' => 'int ',
+        $replace = array(
+            'BOOLEAN ' => 'sint8 ',
             'BOOL ' => 'int ',
             'LPDWORD ' => 'int ',
             'DWORD ' => 'int ',
-            'byte ' => 'int ',
-            'integer ' => 'int ',
-            'string ' => 'char *',
-            'uint ' => 'int ',
-            'cardinal ' => 'int ',
-			'short ' => 'int ',
-			'SHORT ' => 'int ',
+            'BYTE ' => 'int ',
+            'INTEGER ' => 'int ',
+            'STRING ' => 'char *',
+            'UINT ' => 'int ',
+            'CARDINAL ' => 'int ',
+            'SHORT ' => 'int ',
             'LPSTR ' => 'char *',
             'LPCSTR ' => 'char *',
             'LPCTSTR ' => 'char *',
@@ -27,7 +25,19 @@ class _FFI_Helper
             'HANDLE ' => 'int '
         );
 
-        return str_ireplace(array_keys($arr), array_values($arr), $type);
+        return str_ireplace(array_keys($replace), array_values($replace), $string);
+    }
+
+    static function eval_dll_args($path_to_ffi, $var_func_name, $args)
+    {
+        _FFI_Helper::array2_to_array($args);
+        $evl = '$_args = json_decode(base64_decode("' . base64_encode(json_encode($args)) . '"), true);' . "\n";
+        $evl .= 'return ' . $path_to_ffi . '->{' . $var_func_name . '}(';
+        foreach ($args as $argi => $argv) {
+            $evl .= '$_args[' . $argi . ']' . (sizeof($args) - 1 == $argi ? "" : ",");
+        }
+        $evl .= ");";
+        return $evl;
     }
 
     static function array2_to_array(&$args)
@@ -50,17 +60,5 @@ class _FFI_Helper
             $i += 1;
         }
         $args = array_values($args);
-    }
-
-    static function eval_dll_args($path_to_ffi, $var_func_name, $args)
-    {
-        _FFI_Helper::array2_to_array($args);
-        $evl = '$_args = json_decode(\'' . json_encode($args) . '\', true);' ."\n";
-        $evl .= 'return '.$path_to_ffi.'->{'.$var_func_name.'}(';
-        foreach($args as $argi => $argv){
-            $evl .= '$_args[' . $argi . ']' . (sizeof($args)-1 == $argi ? "" : ",");
-        }
-        $evl .= ");";
-        return $evl;
     }
 }

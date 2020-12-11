@@ -2,23 +2,10 @@
 
 class _VCL
 {
-    public static function get_form($_Form)
-    {
-        $Form = NULL;
-        if (is_string($_Form)) {
-            $Form = c($_Form);
-        } elseif (is_object($_Form)) {
-            $Form = $_Form;
-        } else {
-            return false;
-        }
-        return $Form;
-    }
-
     public static function hide($_Form, $SetupMDI = true)
     {
         $Form = self::get_form($_Form);
-        if(!$_Form){
+        if (!$_Form) {
             return false;
         }
         $Form->x = 0;
@@ -43,10 +30,23 @@ class _VCL
         return true;
     }
 
+    public static function get_form($_Form)
+    {
+        $Form = NULL;
+        if (is_string($_Form)) {
+            $Form = c($_Form);
+        } elseif (is_object($_Form)) {
+            $Form = $_Form;
+        } else {
+            return false;
+        }
+        return $Form;
+    }
+
     public static function restoreMDI($_Form)
     {
         $Form = self::get_form($_Form);
-        if(!$_Form){
+        if (!$_Form) {
             return false;
         }
         $Form->formStyle = fsNormal;
