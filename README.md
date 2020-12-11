@@ -31,6 +31,6 @@
 			}
 		}
     });
-
+ 
 ### Скриншоты
 ![](https://prnt.sc/vk7gwg/direct)
