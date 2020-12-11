@@ -4,8 +4,9 @@
 
 ### Как установить
 
-0. Скачать PerfectConsole
-0. Запустить PerfectConsole.dvs в DevelStudio версии 3.0 beta 2, поддержка других версий не проверялась.
+0. Создать новый проект в Devel Studio
+0. Создать папку scripts в директории проекта
+0. Перенести PerfectConsole в папку scripts
 
 ### Как работает приложение
 
@@ -15,18 +16,21 @@
 
 ### Пример кода
 
-    global $Console;
-
-    $Console = new PerfectConsole();
-
-    $Console->Console->AllocConsole();
-    $Console->Console->SetConsoleTitleA("PerfectConsole");
-
-    $Console->printf("Hello World!\nTime: ", FOREGROUND_GREEN);
-    $Console->printf(time(), FOREGROUND_RED);
-
-    $Console->Console->FreeConsole();
-
+    $_Console = new _PerfectConsole;
+    $_Console->Allocate();
+	$_Console->SetTitle("My new console");
+	$_Console->Echof("Hello world!\n");
+    thread_inPool(NULL, function() use ($_Console){
+        $_Console->Echof("Press space to exit;\n");
+		while(1){
+			if ($_Console->GetKeyState(VK_SPACE)){
+				$_Console->Echof("Exit after 3 seconds");
+				usleep(3000000); // 3 000 000 - microseconds
+				$_Console->Free();
+				break;
+			}
+		}
+    });
 
 ### Скриншоты
 ![](https://prnt.sc/vk7gwg/direct)
