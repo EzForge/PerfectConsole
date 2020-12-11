@@ -4,13 +4,13 @@ class _FFI
 {
     private $Libraries, $Built;
 
-    function __construct()
+    public function __construct()
     {
         $this->Libraries = array();
         $this->Built = false;
     }
 
-    static function _Loader()
+    public static function _Loader()
     {
         $_FFI = new _FFI();
 
