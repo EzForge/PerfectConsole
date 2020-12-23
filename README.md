@@ -20,17 +20,15 @@
     $_Console->Allocate();
 	$_Console->SetTitle("My new console");
 	$_Console->Echof("Hello world!\n");
-    thread_inPool(NULL, function() use ($_Console){
         $_Console->Echof("Press space to exit;\n");
-		while(1){
-			if ($_Console->GetKeyState(VK_SPACE)){
-				$_Console->Echof("Exit after 3 seconds");
-				usleep(3000000); // 3 000 000 - microseconds
-				$_Console->Free();
-				break;
-			}
+	while(1){
+		if ($_Console->GetKeyState(VK_SPACE)){
+			$_Console->Echof("Exit after 3 seconds");
+			usleep(3000000); // 3 000 000 - microseconds
+			$_Console->Free();
+			break;
 		}
-    });
+	}
  
 ### Скриншоты
 ![](https://prnt.sc/vk7gwg/direct)
