@@ -2,16 +2,11 @@
 
 class _PerfectConsole
 {
-    private $FFI;
+    public $FFI;
 
     public function __construct()
     {
         $this->FFI = _FFI::_Loader();
-    }
-
-    public function __invoke()
-    {
-        return $this->FFI;
     }
 
     public function GetKeyState($key)

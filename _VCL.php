@@ -2,7 +2,7 @@
 
 class _VCL
 {
-    private $Form;
+    private $Form, $Parameters;
 
     public function __construct($Form)
     {
@@ -28,13 +28,12 @@ class _VCL
 
     public function pushParameters()
     {
-        $Form = $this->Form;
-        if (!$Form) {
+        if (!$this->Form) {
             return false;
         }
         $keys = array_keys($this->Parameters);
         foreach ($keys as $key){
-            $this->Parameters[$key] = $Form->{$key};
+            $this->Parameters[$key] = $this->Form->{$key};
         }
         return true;
     }

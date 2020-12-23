@@ -2,7 +2,7 @@
 
 class Engine
 {
-    private $Console;
+	public $VCL, $Console;
 
     public function __construct($Form)
     {
@@ -10,38 +10,32 @@ class Engine
         $this->VCL = new _VCL($Form);
     }
 
-    public function __invoke()
-    {
-        return $this->Console;
-    }
-
     public static function Loader($Form = false)
     {
         $_Engine = new Engine($Form);
+		
         if($Form){
-            $_Engine->hide();
+            $_Engine->VCL->hide();
         }
-        $_Console = $_Engine();
-        $_Console->Allocate();
-        $_Console->SetTitle("PerfectConsole");
-        $_Console->Printf("Hello world!", "\n");
-        thread_inPool(NULL, function () use ($_Engine, $Form) {
-            $_Console = $_Engine();
-            $_Console->Printf("Press space to exit", "\n");
-            while (1) {
-                if ($_Console->GetKeyState(VK_SPACE)) {
-                    $_Console->Printf("Exit after 3 seconds", "\n");
-                    usleep(3000000); // 3 000 000 - 3 sec in microseconds
-                    $_Engine::AppClose($_Console);
-                    break;
-                }
-            }
-        });
+		
+        $_Engine->Console->Allocate();
+        $_Engine->Console->SetTitle("PerfectConsole");
+        $_Engine->Console->Printf("Hello world!", "\n");
+		$_Engine->Console->Printf("Press space to exit", "\n");
+		
+		while (1) {
+			if ($_Engine->Console->GetKeyState(VK_SPACE)) {
+				$_Engine->Console->Printf("Exit after 3 seconds", "\n");
+				usleep(3000000);
+				Engine::AppClose($_Engine);
+				break;
+			}
+        }
     }
 
     public static function AppClose($_Engine)
     {
-        $_Engine()->Free();
+        $_Engine->Console->Free();
         $_Engine->VCL->restoreMDI();
         app::close();
     }
