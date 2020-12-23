@@ -23,10 +23,10 @@
     $_Console->Echof("Press space to exit;\n");
     while(1) {
         if ($_Console->GetKeyState(VK_SPACE)){
-    		$_Console->Echof("Exit after 3 seconds");
-    		usleep(3000000); // 3 000 000 - microseconds
-    		$_Console->Free();
-    		break;
+            $_Console->Echof("Exit after 3 seconds");
+            usleep(3000000); // 3 000 000 - microseconds
+            $_Console->Free();
+            break;
         }
     }
  
