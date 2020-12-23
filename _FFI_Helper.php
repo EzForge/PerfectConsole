@@ -2,7 +2,7 @@
 
 class _FFI_Helper
 {
-    static function fix($string)
+    public static function fix($string)
     {
         $replace = array(
             'BOOLEAN ' => 'sint8 ',
@@ -28,7 +28,7 @@ class _FFI_Helper
         return str_ireplace(array_keys($replace), array_values($replace), $string);
     }
 
-    static function eval_dll_args($path_to_ffi, $var_func_name, $args)
+    public static function eval_dll_args($path_to_ffi, $var_func_name, $args)
     {
         _FFI_Helper::array2_to_array($args);
         $evl = '$_args = json_decode(base64_decode("' . base64_encode(json_encode($args)) . '"), true);' . "\n";
@@ -40,7 +40,7 @@ class _FFI_Helper
         return $evl;
     }
 
-    static function array2_to_array(&$args)
+    public static function array2_to_array(&$args)
     {
         $i = 0;
         while (1) {

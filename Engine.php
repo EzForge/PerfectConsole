@@ -2,48 +2,41 @@
 
 class Engine
 {
-    private $Console;
+	public $VCL, $Console;
 
-    public function __construct()
+    public function __construct($Form)
     {
         $this->Console = new _PerfectConsole;
+        $this->VCL = new _VCL($Form);
     }
 
-    static function Loader($Form = false)
+    public static function Loader($Form = false)
     {
-        if ($Form) {
-            _VCL::hide($Form);
+        $_Engine = new Engine($Form);
+		
+        if($Form){
+            $_Engine->VCL->hide();
         }
-        $_Engine = new Engine;
-        $_Console = $_Engine();
-        $_Console->Allocate();
-        $_Console->SetTitle("PerfectConsole");
-        $_Console->Printf("Hello world!", "\n");
-        thread_inPool(NULL, function () use ($_Engine, $Form) {
-            $_Console = $_Engine();
-            $_Console->Printf("Press space to exit", "\n");
-            while (1) {
-                if ($_Console->GetKeyState(VK_SPACE)) {
-                    $_Console->Printf("Exit after 3 seconds", "\n");
-                    usleep(3000000); // 3 000 000 - 3 sec in microseconds
-                    $_Engine::AppClose($_Console, $Form);
-                    break;
-                }
-            }
-        });
+		
+        $_Engine->Console->Allocate();
+        $_Engine->Console->SetTitle("PerfectConsole");
+        $_Engine->Console->Printf("Hello world!", "\n");
+		$_Engine->Console->Printf("Press space to exit", "\n");
+		
+		while (1) {
+			if ($_Engine->Console->GetKeyState(VK_SPACE)) {
+				$_Engine->Console->Printf("Exit after 3 seconds", "\n");
+				usleep(3000000);
+				Engine::AppClose($_Engine);
+				break;
+			}
+        }
     }
 
-    static function AppClose($_Console, $Form = false)
+    public static function AppClose($_Engine)
     {
-        $_Console->Free();
-        if ($Form) {
-            _VCL::restoreMDI($Form);
-        }
+        $_Engine->Console->Free();
+        $_Engine->VCL->restoreMDI();
         app::close();
-    }
-
-    public function __invoke()
-    {
-        return $this->Console;
     }
 }
